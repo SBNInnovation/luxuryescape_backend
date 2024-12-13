@@ -2,8 +2,8 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv"
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import addTourRouter from "./admin/routes/tour.routes/tourRoute";
-import dbConnection from "./mongoDb/mongoDbConnection";
+import dbConnection from "./mongoDb/mongoDbConnection.js";
+import addTourRouter from "./admin/routes/tour.routes/tourRoute.js";
 
 const app = express();
 dotenv.config()

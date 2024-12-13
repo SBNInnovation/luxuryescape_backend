@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "module": "ESNext",
+    "target": "ES2020",
+    "moduleResolution": "Node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    //"moduleResolution": "Bundler",  // Add this
+    "noEmit": true,  // Add this if you're using ts-node or another transpiler
+    "allowImportingTsExtensions": true  // Add this
+  },
+  "exclude": ["node_modules"]
+}
+
+
+// {
+//   "compilerOptions": {
+//     "target": "ES2020",
+//     "module": "commonjs",
+//     "esModuleInterop": true,
+//     "skipLibCheck": true,
+//     "strict": true,
+//     "typeRoots": ["node_modules/@types"],
+//     "types": ["node", "express", "multer"]
+//   }
+// }

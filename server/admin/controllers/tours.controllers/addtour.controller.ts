@@ -1,22 +1,45 @@
-// import { Request, Response } from "express";
-// import Tours from "../../models/tours.model/addTours";
-// import { uploadFile } from "../../../utility/cloudinary";
-// import { Multer } from "multer";
+import { Request, Response } from "express";
+import { uploadFile } from "../../../utility/cloudinary.js";
+import Tours from "../../models/tours.model/addTours.js";
+// import {Multer} from "multer"
 
-// // interface MulterRequest extends Request {
-// //     files?: { [fieldname: string]: Express.Multer.File[] } | undefined;
-// //     file?: Express.Multer.File; // For single file uploads
-// // }
+// interface MulterRequest extends Request {
+//     files?: { [fieldname: string]: Express.Multer.File[] };
+// }
 
-// const addTours = async (req: Request, res: Response): Promise<void> => {
+// const addTours = async (req: MulterRequest, res: Response): Promise<void> => {
 //     try {
 //         const {
 //             name,
 //             duration,
 //             idealTime,
 //             cost,
+//             tourTypes,
 //             tourOverview,
-//             destiDays,
+//             destinationDays,
+//             destinationPlace,
+//             keyHighlights,
+//             highlightTitle,
+//             tourInclusion,
+//             mainOverview,
+//             faq,
+//             day,
+//             title,
+//             description,
+//             accommodationTitle,
+//             accomodationDescription,
+//             destinationPhoto, highlightPicture, itineraryDayPhoto, accommodationPics, thumbnail
+//         } = req.body;
+
+//         // Validate required fields
+//         const requiredFields = [
+//             name,
+//             duration,
+//             idealTime,
+//             cost,
+//             tourTypes,
+//             tourOverview,
+//             destinationDays,
 //             destinationPlace,
 //             keyHighlights,
 //             highlightTitle,
@@ -25,88 +48,102 @@
 //             day,
 //             title,
 //             description,
-//             accomodationTitle,
-//             accDescription,
-//             question,
-//             answer,
-//         } = req.body;
+//             accommodationTitle,
+//             accomodationDescription,
+//             destinationPhoto, highlightPicture, itineraryDayPhoto, accommodationPics,
+//             thumbnail
+//         ];
 
-//         // Validate required fields in req.body using OR operator
-//         if (!name || !duration || !idealTime || !cost || !tourOverview || !destiDays || 
-//             !destinationPlace || !keyHighlights || !highlightTitle || !tourInclusion || 
-//             !mainOverview || !day || !title || !description || !accomodationTitle || 
-//             !accDescription || !question || !answer) {
-//             res.status(400).json({ success: false, message: "All fields are required." });
-//             return 
+//         if (requiredFields.some(field => !field)) {
+//             res.status(400).json({
+//                 success: false,
+//                 message: "All required fields must be provided. Please check your input.",
+//             });
+//             return;
 //         }
 
-//         // // Validate required files
-//         // const destinationPhotos = req.files?.["destinationPhotos"]?.[0];
-//         // const highlightPicture = req.files?.["highlightPicture"]?.[0];
-//         // const photo = req.files?.["photo"]?.[0];
-//         // const accomodationPics = req.files?.["accomodationPics"];
+//         // Validate FAQ format
+//         if (faq && !Array.isArray(faq)) {
+//             res.status(400).json({
+//                 success: false,
+//                 message: "FAQ must be an array of objects with 'question' and 'answer'.",
+//             });
+//             return;
+//         }
 
-//         // if (!destinationPhotos || !highlightPicture || !photo || !accomodationPics) {
+//         // Handle files
+//         // const { destinationPhoto, highlightPicture, itineraryDayPhoto, accommodationPics, thumbnail } = req.files || {};
+
+//         // if (!destinationPhoto || !highlightPicture || !itineraryDayPhoto || !accommodationPics || !thumbnail) {
 //         //     res.status(400).json({
 //         //         success: false,
-//         //         message: "Missing required files: destinationPhotos, highlightPicture, photo, or accomodationPics"
+//         //         message: "Missing required files: destinationPhoto, highlightPicture, itineraryDayPhoto, or accommodationPics",
 //         //     });
-//         //     return
+//         //     return;
 //         // }
 
-//         // // Upload files to Cloudinary
-//         // const uploadedDestinationPhoto = await uploadFile(destinationPhotos.path, "LuxuryEscape");
-//         // const uploadedHighlightPicture = await uploadFile(highlightPicture.path, "LuxuryEscape");
-//         // const uploadedPhoto = await uploadFile(photo.path, "LuxuryEscape");
-
-//         // const uploadedAccomodationPics = await Promise.all(
-//         //     accomodationPics.map((file) => uploadFile(file.path, "LuxuryEscape"))
+//         // Upload files
+//         // const uploadedDestinationPhoto = await uploadFile(destinationPhoto[0].path, "LuxuryEscape");
+//         // const uploadedHighlightPicture = await uploadFile(highlightPicture[0].path, "LuxuryEscape");
+//         // const uploadedItineraryDayPhoto = await uploadFile(itineraryDayPhoto[0].path, "LuxuryEscape");
+//         // const uploadedThumbnail = await uploadFile(thumbnail[0].path, "LuxuryEscape");
+//         // const uploadedAccommodationPics = await Promise.all(
+//         //     accommodationPics.map(file => uploadFile(file.path, "LuxuryEscape"))
 //         // );
 
-//         // const accomodationPicUrls = uploadedAccomodationPics.map((img) => img?.url || "");
+//         // Construct nested objects/arrays
+//         const destinationArray = {
+//             destinationDays,
+//             destinationPlace,
+//             destinationPhoto
+//             // destinationPhoto: uploadedDestinationPhoto
+//         };
 
-//         // Create tour in the database
-//         const tour = await Tours.create({
+//         const tourHighlightsArray = {
+//             highlightTitle,
+//             highlightPicture
+//             // highlightPicture: uploadedHighlightPicture
+//         };
+
+//         const accommodationArray = {
+//             accommodationTitle,
+//             accommodationPics,
+//             // accommodationPics: uploadedAccommodationPics,
+//             accomodationDescription
+//         };
+
+//         const tourItineraryArray = {
+//             day,
+//             title,
+//             description,
+//             itineraryDayPhoto,
+//             // itineraryDayPhoto: uploadedItineraryDayPhoto,
+//             accommodation: accommodationArray
+//         };
+
+//         // Build the tour object
+//         const tourData = {
 //             name,
+//             thumbnail,
+//             // thumbnail: uploadedThumbnail,
 //             duration,
 //             idealTime,
 //             cost,
+//             tourTypes,
 //             tourOverview,
-//             destination: {
-//                 destiDays,
-//                 destinationPlace,
-//                 // destinationPhotos: uploadedDestinationPhoto?.url || "",
-//             },
-//             tourHighlights: {
-//                 keyHighlights,
-//                 highlightImages: {
-//                     highlightTitle,
-//                     // highlightPicture: uploadedHighlightPicture?.url || "",
-//                 },
-//             },
+//             destination: destinationArray,
+//             keyHighlights,
+//             tourHighlights: tourHighlightsArray,
 //             tourInclusion,
-//             tourItinerary: {
-//                 mainOverview,
-//                 itinerary: {
-//                     day,
-//                     title,
-//                     description,
-//                     // photo: uploadedPhoto?.url || "",
-//                     accomodation: [
-//                         {
-//                             accomodationTitle,
-//                             accDescription,
-//                             // accomodationPic: accomodationPicUrls,
-//                         },
-//                     ],
-//                 },
-//             },
-//             faq: {
-//                 question,
-//                 answer,
-//             },
-//         });
+//             mainOverview,
+//             tourItinerary: tourItineraryArray,
+//             faq
+//         };
 
+//         // Create tour in the database
+//         const tour = await Tours.create(tourData);
+
+//         // Success response
 //         res.status(200).json({
 //             success: true,
 //             message: "Tour added successfully!",
@@ -124,97 +161,81 @@
 
 // export default addTours;
 
+interface MulterRequest extends Request {
+    files: {
+      thumbnail?: Express.Multer.File[]
+      destinationPhoto?: Express.Multer.File[]
+      highlightPicture?: Express.Multer.File[]
+      itineraryDayPhoto?: Express.Multer.File[]
+      accommodationPics?: Express.Multer.File[]
+    }
+  }
 
-
-
-import { Request, Response } from "express";
-import Tours from "../../models/tours.model/addTours";
-
-const addTours = async (req: Request, res: Response): Promise<void> => {
+const addTours = async (req: MulterRequest, res: Response): Promise<void> => {
     try {
         const {
-            name,
-            thumbnail,
-            duration,
-            idealTime,
-            cost,
-            tourOverview,
-            destination,
-            keyHighlights,
-            tourHighlights,
-            tourInclusion,
-            tourItinerary,
-            faq,
+            name, duration, idealTime, cost, tourTypes, tourOverview, destination, keyHighlights, tourHighlights,
+            tourInclusion, faq, tourItinerary
         } = req.body;
 
-        // Validate required fields
-        if (
-            !name || !thumbnail || !duration || !idealTime || !cost || !tourOverview ||
-            !destination || !keyHighlights || !tourHighlights || !tourInclusion || !tourItinerary
-        ) {
-            res.status(400).json({
+        // Inline validation for required fields
+        if (!name || !duration || !cost || !tourTypes || !tourOverview) {
+             res.status(400).json({
                 success: false,
-                message: "All required fields must be provided. Please check your input.",
+                message: "Missing required fields: name, duration, cost, tourTypes, and tourOverview are mandatory.",
             });
-            return;
+            return
         }
 
-        // Validate and structure the destination
-        if (!Array.isArray(destination)) {
-            res.status(400).json({
-                success: false,
-                message: "Each destination must have 'destiDays', 'destinationPlace', and 'destinationPhotos'.",
-            });
-            return;
-        }
+        const { thumbnail, destinationPhoto, highlightPicture, itineraryDayPhoto, accommodationPics } = req.files || {};
 
-        // Validate and structure the tour highlights
-        if (!Array.isArray(tourHighlights)) {
-            res.status(400).json({
-                success: false,
-                message: "Each highlight must have 'highlightTitle' and 'highlightPicture'.",
-            });
-            return;
-        }
+        // Handle file uploads
+        const uploadedThumbnail = thumbnail && await uploadFile(thumbnail[0].path, "LuxuryEscape");
+        const uploadedDestinationPhoto = destinationPhoto && await uploadFile(destinationPhoto[0].path, "LuxuryEscape");
+        const uploadedHighlightPicture = highlightPicture && await uploadFile(highlightPicture[0].path, "LuxuryEscape");
+        const uploadedItineraryDayPhoto = itineraryDayPhoto && await uploadFile(itineraryDayPhoto[0].path, "LuxuryEscape");
+        const uploadedAccommodationPics = accommodationPics
+            ? await Promise.all(accommodationPics.map(file => uploadFile(file.path, "LuxuryEscape")))
+            : [];
 
-        // Validate and structure the itinerary
-        if (!Array.isArray(tourItinerary.itinerary)) {
-            res.status(400).json({
-                success: false,
-                message: "Each itinerary item must have 'day', 'title', 'description', 'photo', and 'accommodation'.",
-            });
-            return;
-        }
-
-        // Validate FAQ
-        if (!Array.isArray(faq)) {
-            res.status(400).json({
-                success: false,
-                message: "Each FAQ must have 'question' and 'answer'.",
-            });
-            return;
-        }
-
-        // Build the tour object
+        // Build the tour data object
         const tourData = {
             name,
-            thumbnail,
+            thumbnail: uploadedThumbnail || thumbnail,
             duration,
             idealTime,
             cost,
+            tourTypes,
             tourOverview,
-            destination,
-            tourHighlights,
+            destination: destination?.map((d: any, index: number) => ({
+                ...d,
+                destinationPhoto: uploadedDestinationPhoto || destinationPhoto?.[index]?.path,
+            })) || [],
+            keyHighlights,
+            tourHighlights: tourHighlights?.map((h: any, index: number) => ({
+                ...h,
+                highlightPicture: uploadedHighlightPicture || highlightPicture?.[index]?.path,
+            })) || [],
             tourInclusion,
-            tourItinerary,
-            faq
+            faq: faq || [],
+            tourItinerary: {
+                ...tourItinerary,
+                itinerary: tourItinerary?.itinerary?.map((i: any, index: number) => ({
+                    ...i,
+                    itineraryDayPhoto: uploadedItineraryDayPhoto || itineraryDayPhoto?.[index]?.path,
+                    accommodation: i.accommodation?.map((a: any, accIndex: number) => ({
+                        ...a,
+                        accommodationPics: uploadedAccommodationPics[accIndex] || accommodationPics?.[accIndex]?.path,
+                    })) || [],
+                })) || [],
+            },
         };
 
-        // Create tour in the database
+        // Create new tour
         const tour = await Tours.create(tourData);
 
-        // Success response
-        res.status(200).json({
+        // Respond with success
+        res.status(201).json({
             success: true,
             message: "Tour added successfully!",
             tour,
@@ -230,3 +251,4 @@ const addTours = async (req: Request, res: Response): Promise<void> => {
 };
 
 export default addTours;
+

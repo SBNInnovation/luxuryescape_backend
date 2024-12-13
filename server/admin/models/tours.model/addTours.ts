@@ -4,7 +4,7 @@ const destinationSchema = new Schema(
   {
     destinationDays: { type: String, required: true },
     destinationPlace: { type: String, required: true }, 
-    destinationPhotos: { type: String, required: true }
+    destinationPhoto: { type: String, required: true }
   },
   {
     _id: false
@@ -25,7 +25,7 @@ const highlightsPicandTitle = new Schema(
 const accommodationDetails = new Schema(
   {
     accommodationTitle: { type: String, required: true }, 
-    accommodationPic: { type: [String], default: [] }, 
+    accommodationPics: { type: [String], default: [] }, 
     accomodationDescription: { type: String, required: true }
   },
   {
@@ -38,7 +38,7 @@ const itineraryDetails = new Schema(
     day: { type: String, required: true },
     title: { type: String, required: true },
     description: { type: String, required: true },
-    photo: { type: String, required: true },
+    itineraryDayPhoto: { type: String, required: true },
     accommodation: [accommodationDetails] 
   },
   {
@@ -63,6 +63,7 @@ const addTour = new Schema(
     duration: { type: String, required: true },
     idealTime: { type: String, required: true },
     cost: { type: String, required: true },
+    tourTypes: {type:String, required:true},
     destination: [destinationSchema],
     tourOverview: { type: String, required: true },
     keyHighlights: { type: [String], default: [] },
